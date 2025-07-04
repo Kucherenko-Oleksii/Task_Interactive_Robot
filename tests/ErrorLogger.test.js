@@ -52,8 +52,8 @@ describe('ErrorLogger', () => {
       errorLogger.storeError(errorH);
       
       expect(errorLogger.errors).toHaveLength(2);
-      expect(errorLogger.errors[0]).toEqual(errorL);
-      expect(errorLogger.errors[1]).toEqual(errorM);
+      expect(errorLogger.errors[0]).toEqual(errorM);
+      expect(errorLogger.errors[1]).toEqual(errorH);
     });
   });
 

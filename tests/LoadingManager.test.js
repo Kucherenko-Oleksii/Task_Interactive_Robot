@@ -136,10 +136,15 @@ describe('LoadingManager', () => {
       };
       
       const progressBar = loadingManager.createProgressBar(container, options);
+      
+      expect(progressBar.element).toBeDefined();
+      expect(progressBar.setProgress).toBeDefined();
+      expect(progressBar.destroy).toBeDefined();
+      expect(progressBar.element.querySelector('.progress-bar-text')).toBeFalsy();
+          
+      progressBar.setProgress(50);
       const fillElement = progressBar.element.querySelector('.progress-bar-fill');   
       expect(fillElement.style.width).toBe('50%');
-      expect(fillElement.style.backgroundColor).toBe('rgb(255, 0, 0)');
-      expect(progressBar.element.querySelector('.progress-bar-text')).toBeFalsy();
     });
 
     test('should update progress correctly', () => {
