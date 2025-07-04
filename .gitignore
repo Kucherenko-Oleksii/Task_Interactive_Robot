@@ -2,9 +2,19 @@ node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+package-lock.json
 
 dist/
 build/
+
+coverage/
+*.lcov
+lcov.info
+clover.xml
+coverage-final.json
+
+.jest/
+jest-cache/
 
 .vscode/
 .idea/
