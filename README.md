@@ -1,40 +1,45 @@
 # Interactive 3D Robot Scene
+This project demonstrates a 3D robot that responds to user interactions:
+- Click on ground → robot walks to target
+- Click on robot → plays a random animation
+- Idle animation when nothing else is happening
+Includes a bonus feature: head follows the mouse cursor during idle state
 
-WebGL-based interactive 3D scene featuring an animated robot that responds to user interactions through mouse movements and scene navigation
+## Features
+
+✅ Idle animation by default  
+✅ Walk animation and movement on ground click  
+✅ Robot plays random animation on click  
+✅ Smooth animation transitions  
+✅ Bonus: Head tracking follows mouse during idle
 
 ## Demo: https://interactive-robot-3d.netlify.app/
 
 ## Architecture
 
-### Core Implementation
+**Core Implementation**
 - Modular ES6 architecture with dependency injection
 - Three.js for WebGL rendering and scene management
 - GLTF/GLB model format with bone-based animations
 - Event-driven interaction system with raycasting
 - Error boundary implementation for graceful error handling
 
-### Performance Optimizations
+**Performance Optimizations**
 - Animation state machine with transition mixing
 - Bone transform caching
 - Event throttling for performance-critical operations
 - Optimized asset loading with progress tracking
 
-### Technical Features
-- Mouse interaction system
-- Dynamic animation blending
-- Raycasting-based navigation
-- Comprehensive error handling
-
 ## Future Improvements
 
-### Technical Stack Enhancement
+**Technical Stack Enhancement**
 - Migration to React + TypeScript + Vite
 - Implementation of React Three Fiber for better React-Three.js integration
 - State management with Zustand
 - Module bundling optimization with Vite
 - Integration of React Suspense for asset loading
 
-### Feature Enhancements
+**Feature Enhancements**
 - Advanced animation system with procedural generation
 - Physics-based interaction using Rapier
 - WebGL post-processing effects
@@ -42,13 +47,13 @@ WebGL-based interactive 3D scene featuring an animated robot that responds to us
 
 ## Getting Started
 
-1. Clone the repository:
+**1. Clone the repository:**
 ```bash
 git clone https://github.com/Kucherenko-Oleksii/Task_Interactive_Robot.git
 cd Task_Interactive_Robot
 ```
 
-2. Deploy locally:
+**2. Deploy locally:**
 - Using your IDE or code editor:
   - Install "Live Server" extension
   - Right-click on `index.html` and select "Open with Live Server"
@@ -58,3 +63,13 @@ cd Task_Interactive_Robot
   - PHP: `php -S localhost:8000`
 
 **Note:** Opening `index.html` directly in browser won't work due to CORS restrictions when loading 3D models
+
+**3. To run the tests, you need to enter the commands listed below:**
+   ```bash
+   # Run tests
+   npm test
+   
+   # Run with coverage
+   npm run test:coverage
+   
+   ```
