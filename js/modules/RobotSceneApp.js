@@ -164,42 +164,32 @@ export class RobotSceneApp {
   }
 
   isRobotClicked(object) {
-    let current = object;
-    while (current) {
-      if (current.name === 'robot' || current === this.robot) {
-        return true;
-      }
-      current = current.parent;
+    for (let obj = object; obj; obj = obj.parent) {
+        if (obj.name === 'robot' || obj === this.robot) return true;
     }
     return false;
   }
 
   moveRobotTo(targetPoint) {
-
+    this.targetPosition.copy(targetPoint).setY(0.1);
+    
     if (this.isWalking) return;
     
-    this.targetPosition.copy(targetPoint);
-    this.targetPosition.y = 0.1;   
-    this.isWalking = true;
-    this.isIdleState = false;
-    this.isHeadTracking = false;
+    Object.assign(this, {
+        isWalking: true,
+        isIdleState: false,
+        isHeadTracking: false
+    });
     
     this.stopAllAnimations();
-    if (this.animations['Walking']) {
-      this.animations['Walking'].play();
-    }
-    
-    const direction = new THREE.Vector3()
-      .subVectors(this.targetPosition, this.robot.position)
-      .normalize();
-    
-    if (direction.length() > 0) {
-      const targetRotation = Math.atan2(direction.x, direction.z);
-      this.robot.rotation.y = targetRotation;
-    }
+    this.animations.Walking?.play();
   }
 
   playRandomAnimation() {
+    if (this.isWalking) {
+      return;
+    }
+    
     const excludeAnimations = ['Idle', 'Walking'];
     const availableAnimations = Object.keys(this.animations)
       .filter(name => !excludeAnimations.includes(name));
@@ -240,7 +230,6 @@ export class RobotSceneApp {
     const delta = this.clock.getDelta();
   
     this.mixer?.update(delta);
-    
     this.updateHeadRotation();
     
     this.isWalking && this.robot && this.updateMovement(delta);
@@ -253,14 +242,23 @@ export class RobotSceneApp {
       ? this.moveToTarget(delta) 
       : this.arrivedAtTarget();
   }
-  
+
   moveToTarget(delta) {
-    const direction = new THREE.Vector3()
-      .subVectors(this.targetPosition, this.robot.position)
-      .normalize()
-      .multiplyScalar(ROBOT_CONFIG.movement.walking.speed * delta);
+    const { position, rotation } = this.robot;
+    const direction = this.targetPosition.clone().sub(position);
+    const distance = direction.length();
     
-    this.robot.position.add(direction);
+    if (distance < 0.01) return;
+    
+    direction.normalize();
+      
+    const targetY = Math.atan2(direction.x, direction.z);
+    const diff = ((targetY - rotation.y + Math.PI) % (2 * Math.PI)) - Math.PI;
+    rotation.y += Math.sign(diff) * Math.min(Math.abs(diff), 8 * delta);
+
+    const speed = ROBOT_CONFIG.movement.walking.speed;
+    const moveDistance = Math.min(speed * delta, distance);
+    position.add(direction.multiplyScalar(moveDistance));
   }
   
   arrivedAtTarget() {
@@ -273,8 +271,7 @@ export class RobotSceneApp {
       isHeadTracking: true
     });
 
-    this.lastCursorMoveTime = 0;
-    
+    this.lastCursorMoveTime = 0;  
     this.stopAllAnimations();
     this.animations.Idle?.play();
   }
@@ -292,30 +289,17 @@ export class RobotSceneApp {
 
   updateHeadRotation() {
     if (!this.headBone || !this.isHeadTracking) return;
-
-    const currentTime = Date.now();
-    const timeSinceLastMove = currentTime - this.lastCursorMoveTime;
-
-    if (timeSinceLastMove > this.cursorIdleTimeout) {
-      const { default: defaultPos } = ROBOT_CONFIG.movement.head;
-      
-      this.headBone.matrixAutoUpdate = true;
-      this.headBone.rotation.x = THREE.MathUtils.lerp(
-        this.headBone.rotation.x,
-        defaultPos.x,
-        defaultPos.smoothness
-      );
-      this.headBone.rotation.y = THREE.MathUtils.lerp(
-        this.headBone.rotation.y,
-        defaultPos.y,
-        defaultPos.smoothness
-      );
-      this.headBone.rotation.z = THREE.MathUtils.lerp(
-        this.headBone.rotation.z,
-        defaultPos.z,
-        defaultPos.smoothness
-      );
-      this.headBone.updateMatrix();
-    }
+    
+    const isIdle = Date.now() - this.lastCursorMoveTime > this.cursorIdleTimeout;
+    if (!isIdle) return;
+    
+    const { default: defaultPos } = ROBOT_CONFIG.movement.head;
+    const { rotation } = this.headBone;
+    
+    this.headBone.matrixAutoUpdate = true;
+    rotation.x = THREE.MathUtils.lerp(rotation.x, defaultPos.x, defaultPos.smoothness);
+    rotation.y = THREE.MathUtils.lerp(rotation.y, defaultPos.y, defaultPos.smoothness);
+    rotation.z = THREE.MathUtils.lerp(rotation.z, defaultPos.z, defaultPos.smoothness);
+    this.headBone.updateMatrix();
   }
 }
