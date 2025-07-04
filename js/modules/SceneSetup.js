@@ -14,12 +14,12 @@ export class SceneSetup {
     this.scene.background = null;
     
     this.camera = new THREE.PerspectiveCamera(
-      75,
+      45,
       this.canvas.clientWidth / this.canvas.clientHeight,
-      0.1,
+      0.5,
       1000
     );
-    this.camera.position.set(6, 3, 6); 
+    this.camera.position.set(8, 4, 8); 
     this.camera.lookAt(0, 1, 0); 
 
     this.renderer = new THREE.WebGLRenderer({ 
