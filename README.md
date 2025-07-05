@@ -2,8 +2,7 @@
 This project demonstrates a 3D robot that responds to user interactions:
 - Click on ground → robot walks to target
 - Click on robot → plays a random animation
-- Idle animation when nothing else is happening
-Includes a bonus feature: head follows the mouse cursor during idle state
+- Idle animation when nothing else is happening Includes a bonus feature: head follows the mouse cursor during idle state
 
 ## Features
 
@@ -14,6 +13,7 @@ Includes a bonus feature: head follows the mouse cursor during idle state
 ✅ Bonus: Head tracking follows mouse during idle
 
 ## Demo: https://interactive-robot-3d.netlify.app/
+## Video: https://drive.google.com/file/d/18YQnQqOhdiiDCqNraaH8Zt26E1YUJ21r/view?usp=sharing
 
 ## Architecture
 
@@ -33,16 +33,16 @@ Includes a bonus feature: head follows the mouse cursor during idle state
 ## Future Improvements
 
 **Technical Stack Enhancement**
-- Migration to React + TypeScript + Vite
-- Implementation of React Three Fiber for better React-Three.js integration
-- State management with Zustand
-- Module bundling optimization with Vite
-- Integration of React Suspense for asset loading
+- Migration to React + TypeScript + Vite for better developer experience
+- Implementation of React Three Fiber for declarative 3D scene management
+- State management with Zustand for predictable state updates
+- Module bundling optimization with Vite for faster development and builds
+- Integration of React Suspense for progressive asset loading
 
 **Feature Enhancements**
 - Advanced animation system with procedural generation
-- Physics-based interaction using Rapier
-- WebGL post-processing effects
+- Physics-based interaction using Rapier physics engine
+- Implementation of WebGL post-processing effects to enhance visual content quality
 - WebAssembly integration for performance-critical computations
 
 ## Getting Started
@@ -53,7 +53,12 @@ git clone https://github.com/Kucherenko-Oleksii/Task_Interactive_Robot.git
 cd Task_Interactive_Robot
 ```
 
-**2. Deploy locally:**
+**2. Install dependencies:**
+```bash
+npm install
+```
+
+**3. Deploy locally:**
 - Using your IDE or code editor:
   - Install "Live Server" extension
   - Right-click on `index.html` and select "Open with Live Server"
